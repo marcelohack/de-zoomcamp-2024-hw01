@@ -1,0 +1,6 @@
+data/*
+!data/0-init.sql
+creds/
+gcp_stack/*.tfstate*
+gcp_stack/.terraform/
+gcp_stack/.terraform.lock.hcl

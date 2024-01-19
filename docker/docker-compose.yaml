@@ -1,0 +1,34 @@
+version: '3.9'
+
+services:
+  pgdatabase:
+    image: postgres:15
+    ports:
+      - '5432:5432'
+    volumes:
+      - ../data/postgres:/var/lib/postgresql/data
+      - ../data/0-init.sql:/docker-entrypoint-initdb.d/0-init.sql
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_DB=ny_taxi
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready", "-d", "ny_taxi"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: always
+
+  adminer:
+    image: adminer
+    ports:
+      - '8088:8080'
+    restart: always
+    depends_on:
+      pgdatabase:
+        condition: service_healthy
+
+networks:
+  default:
+    name: ny_taxi_hw01
+
